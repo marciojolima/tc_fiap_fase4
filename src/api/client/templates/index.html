@@ -1,0 +1,230 @@
+<!-- ~/dev/projects/python/tc_fiap_fase4/src/api/client/templates/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🚀 FIAP Tech Challenge</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/about">Sobre</a></li>
+                <li><a href="/docs" target="_blank">API Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Previsão de Preços PETR4.SA</h1>
+                <p class="hero-subtitle">Utilizando Machine Learning para prever os preços das ações da Petrobras</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToPredict()">Fazer Previsão</button>
+                    <a href="/docs" class="btn btn-secondary" target="_blank">Ver Documentação</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Recursos</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Análise Avançada</h3>
+                    <p>Algoritmos de ML treinados com dados históricos da PETR4.SA</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Alta Precisão</h3>
+                    <p>Modelo LSTM com 89% de acurácia nas previsões</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Tempo Real</h3>
+                    <p>Previsões geradas instantaneamente via API REST</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prediction-section" id="predict">
+        <div class="container">
+            <h2 class="section-title">Fazer Previsão</h2>
+            <div class="prediction-container">
+                <div class="prediction-form">
+                    <label for="dias">Número de dias para previsão:</label>
+                    <input type="number" id="dias" min="1" max="365" value="7">
+                    <button class="btn btn-primary" onclick="fazerPrevisao()">Prever</button>
+                </div>
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Gerando previsão...</p>
+                </div>
+                <div id="resultado" class="resultado"></div>
+            </div>
+        </div>
+    </section>
+<!-- ~/dev/projects/python/tc_fiap_fase4/src/api/client/templates/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🛢️ FIAP Tech Challenge - Petrobras</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="active">🏠 Home</a></li>
+                <li><a href="/about">📖 Sobre</a></li>
+                <li><a href="/docs" target="_blank">📚 API Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Previsão de Preços PETR4.SA</h1>
+                <p class="hero-subtitle">⛽ Utilizando Inteligência Artificial para prever os preços das ações da Petrobras 📈</p>
+                <div class="petrobras-badge">
+                    🇧🇷 Petrobras - Energia que Move o Brasil
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="scrollToPredict()">🚀 Fazer Previsão</button>
+                    <a href="/docs" class="btn btn-secondary" target="_blank">📖 Ver Documentação</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">⭐ Recursos da Plataforma</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛢️</div>
+                    <h3>Dados Petrobras</h3>
+                    <p>Análise completa dos dados históricos da PETR4.SA com indicadores do setor de petróleo e gás</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>IA Avançada</h3>
+                    <p>Modelo LSTM de última geração treinado especificamente para o mercado de energia brasileiro</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Resultados Instantâneos</h3>
+                    <p>Previsões geradas em tempo real através de nossa API REST de alta performance</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Análise Técnica</h3>
+                    <p>Indicadores técnicos e fundamentalistas integrados para decisões mais informadas</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Alta Precisão</h3>
+                    <p>Acurácia de 89% com métricas MAE, RMSE e R² validadas em dados históricos</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Confiável</h3>
+                    <p>Sistema robusto desenvolvido seguindo as melhores práticas de engenharia de ML</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="prediction-section" id="predict">
+        <div class="container">
+            <h2 class="section-title">🔮 Fazer Previsão</h2>
+            <div class="prediction-container">
+                <div class="prediction-form">
+                    <label for="dias">🗓️ Número de dias para previsão:</label>
+                    <input type="number" id="dias" min="1" max="365" value="7" placeholder="Digite entre 1 e 365 dias">
+                    <button class="btn btn-primary" onclick="fazerPrevisao()">🚀 Gerar Previsão</button>
+                </div>
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>⚙️ Processando dados e gerando previsão...</p>
+                </div>
+                <div id="resultado" class="resultado"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" style="background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%); padding: 4rem 0;">
+        <div class="container">
+            <h2 class="section-title">💡 Por que usar nossa plataforma?</h2>
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <p style="font-size: 1.2rem; color: var(--text-color); margin-bottom: 2rem;">
+                    Nossa plataforma combina anos de dados históricos da Petrobras com algoritmos avançados de Machine Learning, 
+                    oferecendo previsões precisas que podem auxiliar em decisões de investimento no setor energético brasileiro.
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">📈</div>
+                        <h3 style="color: var(--petrobras-blue); margin-bottom: 0.5rem;">Dados Históricos</h3>
+                        <p style="color: var(--text-color);">Anos de cotações</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎓</div>
+                        <h3 style="color: var(--petrobras-blue); margin-bottom: 0.5rem;">FIAP Certified</h3>
+                        <p style="color: var(--text-color);">Tech Challenge</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🇧🇷</div>
+                        <h3 style="color: var(--petrobras-blue); margin-bottom: 0.5rem;">Foco Brasil</h3>
+                        <p style="color: var(--text-color);">Mercado nacional</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>🛢️ <strong>PETR4.SA</strong> - Sistema de Previsão de Ações Petrobras</p>
+            <p>&copy; {{ ano }} Tech Challenge FIAP - Fase 4 | Turma 6MELT</p>
+            <p>Desenvolvido com 💚 usando FastAPI, TensorFlow e Machine Learning</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                ⚠️ Este sistema é para fins educacionais. Não constitui recomendação de investimento.
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{ ano }} Tech Challenge FIAP - Fase 4. Todos os direitos reservados.</p>
+            <p>Desenvolvido com ❤️ usando FastAPI e Machine Learning</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

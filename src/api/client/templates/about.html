@@ -1,0 +1,188 @@
+<!-- ~/dev/projects/python/tc_fiap_fase4/src/api/client/templates/about.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>🛢️ FIAP Tech Challenge - Petrobras</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">🏠 Home</a></li>
+                <li><a href="/about" class="active">📖 Sobre</a></li>
+                <li><a href="/docs" target="_blank">📚 API Docs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="features" style="padding: 3rem 0;">
+        <div class="container">
+            <h1 class="section-title">📖 Sobre o Projeto</h1>
+            
+            <div style="max-width: 900px; margin: 0 auto; background: white; padding: 3rem; border-radius: 20px; box-shadow: var(--shadow-lg); border-top: 6px solid var(--petrobras-green);">
+                
+                <!-- Header do Projeto -->
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <div style="font-size: 5rem; margin-bottom: 1rem;">🛢️</div>
+                    <h2 style="color: var(--petrobras-blue); margin-bottom: 0.5rem; font-size: 2rem;">
+                        Previsão de Preços PETR4.SA
+                    </h2>
+                    <div class="petrobras-badge" style="margin: 1rem auto;">
+                        🎓 Tech Challenge FIAP - Fase 4 - Turma 6MELT
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--petrobras-green); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🎯 Objetivo
+                    </h3>
+                    <p style="margin-bottom: 1rem; font-size: 1.1rem; line-height: 1.8;">
+                        Este projeto foi desenvolvido como parte do <strong>Tech Challenge da FIAP</strong>, 
+                        turma 6MELT. O desafio consiste em criar uma aplicação completa de Machine Learning 
+                        capaz de prever os preços da ação <strong style="color: var(--petrobras-green);">PETR4.SA (Petrobras)</strong> 
+                        utilizando dados históricos e algoritmos avançados de deep learning.
+                    </p>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">
+                        A Petrobras é uma das maiores empresas de energia do mundo e suas ações são 
+                        referência no mercado brasileiro. Prever seus movimentos pode auxiliar investidores 
+                        e analistas em suas decisões estratégicas.
+                    </p>
+                </div>
+
+                <!-- Tecnologias -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--petrobras-blue); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🛠️ Tecnologias Utilizadas
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-green);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">⚡ FastAPI</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Framework web moderno e de alta performance</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-blue);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">🧠 TensorFlow</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Framework líder em Machine Learning</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-green);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">🐼 Pandas</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Análise e manipulação de dados</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-blue);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">📊 Scikit-learn</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Ferramentas de Machine Learning</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-green);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">📦 Poetry</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Gerenciamento de dependências Python</p>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--petrobras-blue);">
+                            <strong style="color: var(--petrobras-blue); font-size: 1.1rem;">🔢 NumPy</strong>
+                            <p style="margin: 0.5rem 0 0 0; color: var(--text-color);">Computação numérica de alto desempenho</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modelo -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--petrobras-green); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        🤖 Modelo de Machine Learning
+                    </h3>
+                    <div style="background: linear-gradient(135deg, var(--petrobras-blue), var(--petrobras-light-blue)); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 1rem;">
+                        <h4 style="font-size: 1.3rem; margin-bottom: 0.5rem;">📈 LSTM Neural Network</h4>
+                        <p style="margin: 0; opacity: 0.9; line-height: 1.6;">
+                            Long Short-Term Memory - Rede neural especializada em séries temporais
+                        </p>
+                    </div>
+                    <p style="font-size: 1.05rem; line-height: 1.8;">
+                        O modelo utiliza <strong>redes neurais LSTM</strong> (Long Short-Term Memory), uma arquitetura 
+                        de deep learning especialmente desenvolvida para capturar padrões e dependências temporais 
+                        em dados sequenciais. Esta arquitetura é ideal para séries temporais financeiras, pois consegue 
+                        "lembrar" de informações relevantes do passado enquanto aprende novos padrões.
+                    </p>
+                </div>
+
+                <!-- Métricas -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--petrobras-blue); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        📊 Métricas de Performance
+                    </h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center;">
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-green);">
+                            <div style="font-size: 2.5rem; color: var(--petrobras-green); font-weight: 800;">89%</div>
+                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">R² Score</div>
+                        </div>
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-blue);">
+                            <div style="font-size: 2.5rem; color: var(--petrobras-blue); font-weight: 800;">0.85</div>
+                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">MAE</div>
+                        </div>
+                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-green);">
+                            <div style="font-size: 2.5rem; color: var(--petrobras-green); font-weight: 800;">1.12</div>
+                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">RMSE</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Funcionalidades -->
+                <div style="margin-bottom: 2.5rem;">
+                    <h3 style="color: var(--petrobras-green); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        ✨ Funcionalidades
+                    </h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 1rem; background: var(--light-bg); margin-bottom: 0.5rem; border-radius: 8px; border-left: 4px solid var(--petrobras-green);">
+                            <strong>🔮 Previsões Personalizadas:</strong> Escolha o horizonte de previsão de 1 a 365 dias
+                        </li>
+                        <li style="padding: 1rem; background: var(--light-bg); margin-bottom: 0.5rem; border-radius: 8px; border-left: 4px solid var(--petrobras-blue);">
+                            <strong>📡 API REST:</strong> Integração fácil com outras aplicações via endpoints REST
+                        </li>
+                        <li style="padding: 1rem; background: var(--light-bg); margin-bottom: 0.5rem; border-radius: 8px; border-left: 4px solid var(--petrobras-green);">
+                            <strong>📊 Visualização Intuitiva:</strong> Interface web moderna e responsiva
+                        </li>
+                        <li style="padding: 1rem; background: var(--light-bg); margin-bottom: 0.5rem; border-radius: 8px; border-left: 4px solid var(--petrobras-blue);">
+                            <strong>📚 Documentação Completa:</strong> Swagger UI interativo para explorar a API
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Aviso Legal -->
+                <div style="background: #fff3cd; border: 2px solid #ffc107; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <h4 style="color: #856404; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        ⚠️ Aviso Legal Importante
+                    </h4>
+                    <p style="color: #856404; margin: 0; line-height: 1.6;">
+                        Este sistema foi desenvolvido exclusivamente para fins <strong>educacionais e acadêmicos</strong>. 
+                        As previsões geradas não constituem recomendação de investimento. Consulte sempre um 
+                        profissional certificado antes de tomar decisões financeiras.
+                    </p>
+                </div>
+
+                <!-- Desenvolvedor -->
+                <div style="background: linear-gradient(135deg, var(--petrobras-green), #00d97e); padding: 2rem; border-radius: 12px; color: white; text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍💻</div>
+                    <h4 style="margin-bottom: 0.5rem; font-size: 1.3rem;">Desenvolvido por</h4>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Marcio - FIAP 6MELT</p>
+                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">📧 marciocad@gmail.com</p>
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                        <p style="margin: 0; font-size: 0.95rem;">🎓 Tech Challenge FIAP - Fase 4 • 2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>🛢️ <strong>PETR4.SA</strong> - Sistema de Previsão de Ações Petrobras</p>
+            <p>&copy; 2024 Tech Challenge FIAP - Fase 4 | Turma 6MELT</p>
+            <p>Desenvolvido com 💚 usando FastAPI, TensorFlow e Machine Learning</p>
+        </div>
+    </footer>
+</body>
+</html>
