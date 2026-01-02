@@ -139,3 +139,12 @@ O modelo foi avaliado utilizando dados históricos de validação (últimos 5% d
 ├── Dockerfile
 ├── pyproject.toml
 └── README.md
+
+## 👥 Autores
+
+**Turma 6MELT - FIAP**
+
+* Luca Poiti - RM365678
+* Gabriel Jordan - RM365606
+* Luciana Ferreira - RM366171
+* Marcio Lima - RM365919
