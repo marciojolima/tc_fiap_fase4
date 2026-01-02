@@ -139,6 +139,7 @@ O modelo foi avaliado utilizando dados históricos de validação (últimos 5% d
 ├── Dockerfile
 ├── pyproject.toml
 └── README.md
+```
 
 ## 👥 Autores
 
