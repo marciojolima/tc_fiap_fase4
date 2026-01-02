@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16-orange?style=for-the-badge&logo=tensorflow)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi)
-![Status](https://img.shields.io/badge/Status-Concluído-green?style=for-the-badge)
+<!-- ![Status](https://img.shields.io/badge/Status-Concluído-green?style=for-the-badge)-->
 
 ## 📄 Sobre o Projeto
 
