@@ -3,123 +3,91 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16-orange?style=for-the-badge&logo=tensorflow)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi)
-<!-- ![Status](https://img.shields.io/badge/Status-Concluído-green?style=for-the-badge)-->
 
 ## 📄 Sobre o Projeto
 
-Este projeto compõe a **Fase 4** do Tech Challenge da Pós-Graduação em **Machine Learning Engineering** da FIAP.
+Este projeto corresponde à **Fase 4** do **Tech Challenge** da Pós-Graduação em **Machine Learning Engineering** da FIAP.
 
-O objetivo foi desenvolver uma pipeline completa de Machine Learning (End-to-End) para prever o preço de fechamento das ações da **Petrobras (PETR4.SA)**. O sistema utiliza uma Rede Neural Recorrente (RNN) do tipo **LSTM (Long Short-Term Memory)**, capaz de capturar padrões temporais complexos em séries financeiras.
+O objetivo é desenvolver uma **pipeline completa de Machine Learning (End-to-End)** para prever o **preço de fechamento** das ações da **Petrobras (PETR4.SA)**, utilizando uma Rede Neural Recorrente do tipo **LSTM (Long Short-Term Memory)**, capaz de capturar dependências temporais em séries financeiras.
 
-Diferente de uma "caixa preta", este projeto foca na **explicabilidade**, apresentando ao usuário final não apenas o valor previsto, mas também os indicadores macroeconômicos e técnicos que alimentaram a decisão da IA.
+O projeto prioriza **transparência e interpretabilidade**, apresentando ao usuário final não apenas o valor previsto, mas também os **indicadores técnicos e macroeconômicos** que influenciam a decisão do modelo.
+
+---
+
+## 📓 Notebook principal do projeto
+
+Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluindo coleta de dados, pré-processamento, engenharia de features, treinamento, avaliação e validação — está documentada de forma detalhada no notebook abaixo:
+
+➡️ [Acessar notebook comentado](./notebook/TC_FASE4.ipynb)
 
 ---
 
 ## 🎯 Funcionalidades Principais
 
-*   **Pipeline de Dados em Tempo Real:** Coleta dados históricos via `yfinance` e indicadores macroeconômicos (Selic) via API do Banco Central.
-*   **Engenharia de Features Avançada:** Calcula automaticamente 34 indicadores, incluindo RSI, MACD, Bandas de Bollinger, Volatilidade de Parkinson e correlações com Brent/Dólar.
-*   **Modelo LSTM Otimizado:** Rede neural treinada para prever o *Retorno Logarítmico* (Log Return), garantindo estacionariedade e melhores resultados.
-*   **Dashboard Interativo:** Frontend amigável que exibe:
-    *   Cotação atual e dados de mercado.
-    *   Painel de indicadores macroeconômicos e técnicos.
-    *   Explicação pedagógica da metodologia usada.
-    *   Tabela de previsão futura.
-*   **API RESTful:** Backend robusto construído com **FastAPI**.
+- **Pipeline de Dados Automatizado:**  
+  Coleta dados históricos e indicadores macroeconômicos, como Câmbio (USD/BRL), Petróleo Brent, B3 e Selic.
+
+- **Engenharia de Features:**  
+  Cálculo de indicadores técnicos (RSI, MACD, Bandas de Bollinger, Médias Móveis), volatilidade, retornos e correlações com ativos externos.
+
+- **Modelo LSTM:**  
+  Rede neural treinada para prever o **Retorno Logarítmico Diário**, garantindo estacionariedade e maior estabilidade numérica.
+
+- **Dashboard Interativo:**  
+  Interface web que exibe:
+  - Cotação atual e dados de mercado, dispensando a entrada manual de históricos.
+  - Painel de indicadores técnicos e macroeconômicos.
+  - Explicação da metodologia adotada.
+  - Tabela com projeções futuras de preço.
+
+- **API RESTful:**  
+  Backend desenvolvido com **FastAPI**, responsável por realizar inferência e servir o modelo treinado.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-*   **Linguagem:** Python 3.12
-*   **Gerenciamento de Dependências:** Poetry
-*   **Machine Learning:** TensorFlow/Keras, Scikit-learn
-*   **Processamento de Dados:** Pandas, NumPy, Yfinance
-*   **Backend:** FastAPI, Uvicorn
-*   **Frontend:** HTML5, CSS3, JavaScript (Vanilla)
-*   **Containerização:** Docker (Pronto para deploy)
+- **Linguagem:** Python 3.12  
+- **Gerenciamento de Dependências:** Poetry  
+- **Machine Learning:** TensorFlow/Keras, Scikit-learn  
+- **Processamento de Dados:** Pandas, NumPy, YFinance  
+- **Backend:** FastAPI, Uvicorn  
+- **Frontend:** HTML5, CSS3, JavaScript  
+- **Containerização:** Docker (pronto para deploy)
 
 ---
 
 ## 🧠 Arquitetura da Solução
 
-O projeto atende aos requisitos do desafio seguindo esta estrutura:
+1. **Coleta & Pré-processamento**
+   - Normalização dos dados com `MinMaxScaler`
+   - Criação de janelas deslizantes (*sliding windows*) de 20 dias
 
-1.  **Coleta & Pré-processamento:**
-    *   Os dados são normalizados usando `MinMaxScaler`.
-    *   Transformação de séries temporais em janelas deslizantes (*sliding windows*) de 20 dias (Lookback).
-2.  **Modelo LSTM:**
-    *   Arquitetura com camadas LSTM, Dropout (para evitar overfitting) e Dense.
-    *   Target: Log Return (Retorno Logarítmico) para estabilidade numérica.
-3.  **Persistência:**
-    *   O modelo treinado é salvo em `.keras`.
-    *   Os escaladores (Scalers) são salvos em `.pkl` para garantir que os dados de entrada da API sofram a mesma transformação do treino.
-4.  **Inferência (API):**
-    *   O endpoint `/api/predict` recebe o pedido, baixa os dados mais recentes do mercado, processa as features e retorna a previsão com a escala invertida para o preço real (R$).
+2. **Modelagem com LSTM**
+   - Camadas LSTM empilhadas
+   - Dropout para mitigação de overfitting
+   - Camada Dense para regressão
 
----
+3. **Avaliação**
+   - Métricas utilizadas: **MAE** e **RMSE**
+   - Validação com os últimos 5% do conjunto de dados
 
-## 🚀 Como Executar o Projeto
+4. **Persistência**
+   - Modelo salvo no formato `.keras`
+   - Scalers serializados em `.pkl`
 
-### Pré-requisitos
-*   Python 3.12+
-*   Poetry (Recomendado) ou Pip
-*   Git
-
-### Passo a Passo
-
-1.  **Clone o repositório:**
-    ```bash
-    git clone https://github.com/SEU-USUARIO/tc-fiap-fase4.git
-    cd tc-fiap-fase4
-    ```
-
-2.  **Instale as dependências com Poetry:**
-    ```bash
-    poetry install
-    poetry shell
-    ```
-
-3.  **Treine o Modelo (Opcional):**
-    *   Se quiser gerar novos arquivos `.keras` e `.pkl`, execute o notebook Jupyter localizado em `notebooks/` ou o script de treino (se houver).
-    *   *Nota: O projeto já vem com modelos pré-treinados na pasta `src/models`.*
-
-4.  **Inicie a API:**
-    ```bash
-    fastapi dev src/api/main.py
-    ```
-
-5.  **Acesse o Dashboard:**
-    *   Abra o navegador em: `http://127.0.0.1:8000`
-    *   Para a documentação da API (Swagger): `http://127.0.0.1:8000/docs`
-
----
-
-## 🐳 Executando com Docker
-
-Para garantir a reprodutibilidade e escalabilidade, você pode rodar a aplicação em um container:
-
-1.  **Construir a imagem:**
-    ```bash
-    docker build -t petr4-predictor .
-    ```
-
-2.  **Rodar o container:**
-    ```bash
-    docker run -p 8000:8000 petr4-predictor
-    ```
+5. **Inferência via API**
+   - Endpoint `/api/predict`
+   - Coleta automática dos dados mais recentes
+   - Retorno da previsão convertida para o valor real em reais (R$)
 
 ---
 
 ## 📊 Métricas e Resultados
 
-O modelo foi avaliado utilizando dados históricos de validação (últimos 5% do dataset), obtendo métricas consistentes para o mercado volátil de renda variável.
-
-*   **Janela de Observação (Lookback):** 20 dias
-*   **Target:** Retorno Logarítmico diário
-*   **Feature Engineering:** Inclusão de Sazonalidade (Seno/Cosseno de dia e mês) e Volatilidade.
-
-> *Nota: O dashboard exibe um nível de confiança fixo estimado de 89% baseado nos testes de validação de direção de tendência.*
+- **Lookback:** 20 dias  
+- **Target:** Retorno Logarítmico Diário  
+- **Feature Engineering:** Sazonalidade (seno/cosseno) e volatilidade
 
 ---
 
@@ -140,6 +108,16 @@ O modelo foi avaliado utilizando dados históricos de validação (últimos 5% d
 ├── pyproject.toml
 └── README.md
 ```
+
+## Conclusão
+
+Neste projeto, foi desenvolvida uma solução completa de *Machine Learning* para previsão de preços de ações, contemplando todas as etapas do ciclo de vida de um modelo, desde a coleta e preparação dos dados até o deploy em uma API funcional.
+
+A utilização de redes neurais do tipo **LSTM**, aliada a uma engenharia de features robusta e à modelagem baseada em retorno logarítmico, permitiu capturar padrões temporais relevantes em um contexto de alta volatilidade, como o mercado financeiro.
+
+Além do aspecto preditivo, o projeto também se preocupa com a **transparência e interpretabilidade**, fornecendo ao usuário final indicadores técnicos e macroeconômicos que auxiliam na compreensão das previsões geradas.
+
+Para o futuro, destacam-se a incorporação de novas fontes de dados, o aprimoramento do monitoramento em produção e a avaliação contínua do modelo para adaptação a mudanças no regime de mercado.
 
 ## 👥 Autores
 
