@@ -21,7 +21,7 @@ O projeto prioriza **transparência e interpretabilidade**, apresentando ao usu�
 - [Métricas e Resultados](#-métricas-e-resultados)
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Instalação e Execução](#️-instalação-e-execução)
-- [Como Acessar a Aplicação](#-como-acessar-a-aplicação)
+- [Como Acessar a Aplicação](#como-acessar-a-aplicação)
 - [Conclusão](#conclusão)
 - [Autores](#-autores)
 
