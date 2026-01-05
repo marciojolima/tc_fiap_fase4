@@ -12,9 +12,22 @@ O objetivo é desenvolver uma **pipeline completa de Machine Learning (End-to-En
 
 O projeto prioriza **transparência e interpretabilidade**, apresentando ao usuário final não apenas o valor previsto, mas também os **indicadores técnicos e macroeconômicos** que influenciam a decisão do modelo.
 
+## 📑 Tabela de Conteúdo
+
+- [Notebook Principal](#-notebook-principal-do-projeto)
+- [Funcionalidades Principais](#-funcionalidades-principais)
+- [Tecnologias Utilizadas](#️-tecnologias-utilizadas)
+- [Arquitetura da Solução](#-arquitetura-da-solução)
+- [Métricas e Resultados](#-métricas-e-resultados)
+- [Estrutura de Pastas](#-estrutura-de-pastas)
+- [Instalação e Execução](#️-instalação-e-execução)
+- [Como Acessar a Aplicação](#-como-acessar-a-aplicação)
+- [Conclusão](#conclusão)
+- [Autores](#-autores)
+
 ---
 
-## 📓 Notebook principal do projeto
+## 📓 Notebook Principal do Projeto
 
 Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluindo coleta de dados, pré-processamento, engenharia de features, treinamento, avaliação e validação — está documentada de forma detalhada no notebook abaixo:
 
@@ -25,7 +38,7 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 ## 🎯 Funcionalidades Principais
 
 - **Pipeline de Dados Automatizado:**  
-  Coleta dados históricos e indicadores macroeconômicos, como Câmbio (USD/BRL), Petróleo Brent, B3 e Selic.
+  Coleta dados históricos e indicadores macroeconômicos, como Câmbio (USD/BRL), Petróleo Brent, Ibovespa e Selic.
 
 - **Engenharia de Features:**  
   Cálculo de indicadores técnicos (RSI, MACD, Bandas de Bollinger, Médias Móveis), volatilidade, retornos e correlações com ativos externos.
@@ -35,7 +48,7 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 
 - **Dashboard Interativo:**  
   Interface web que exibe:
-  - Cotação atual e dados de mercado, dispensando a entrada manual de históricos.
+  - Cotação atual e dados de mercado (sem necessidade de entrada manual de históricos).
   - Painel de indicadores técnicos e macroeconômicos.
   - Explicação da metodologia adotada.
   - Tabela com projeções futuras de preço.
@@ -50,7 +63,7 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 - **Linguagem:** Python 3.12  
 - **Gerenciamento de Dependências:** Poetry  
 - **Machine Learning:** TensorFlow/Keras, Scikit-learn  
-- **Processamento de Dados:** Pandas, NumPy, YFinance  
+- **Processamento de Dados:** Pandas, NumPy, yfinance  
 - **Backend:** FastAPI, Uvicorn  
 - **Frontend:** HTML5, CSS3, JavaScript  
 - **Containerização:** Docker (pronto para deploy)
@@ -94,7 +107,6 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 ## 📂 Estrutura de Pastas
 
 ```text
-.
 ├── src
 │   ├── api
 │   │   ├── client          # Frontend (HTML/CSS/JS)
@@ -108,6 +120,7 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 ├── pyproject.toml
 └── README.md
 ```
+
 ## ⚙️ Instalação e Execução
 
 Siga os passos abaixo para executar o projeto localmente.
@@ -115,15 +128,15 @@ Siga os passos abaixo para executar o projeto localmente.
 ### Pré-requisitos
 -   [Git](https://git-scm.com/)
 -   [Docker](https://www.docker.com/products/docker-desktop/)
--   [Python 3.12](https://www.python.org/) (para execução sem Docker)
+-   [Python 3.12](https://www.python.org/) exatamente esta versão para compatibilidade com o treino do modelo
 -   [Poetry](https://python-poetry.org/)
 
 
 ### Clone o repositório e altere para o caminho raiz do projeto:
-    ```bash
-    git clone https://github.com/marciojolima/tc_fiap_fase4.git
-    cd tc_fiap_fase4
-    ```
+```bash
+git clone https://github.com/marciojolima/tc_fiap_fase4.git
+cd tc_fiap_fase4
+```
 ### Opção: Poetry
 
 Para executar a API localmente utilizando Poetry.
@@ -131,35 +144,34 @@ Para executar a API localmente utilizando Poetry.
 Certifique-se que o prompt esteja na pasta raiz do projeto
 
 **Instale as dependências:**
-    ```bash
-    poetry install
-    ```
+```bash
+poetry install
+```
 
 **Inicie o servidor da API:**
-    ```bash
-    poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
-    ```
+```bash
+poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
 
 ### Opção 3: Pip
 
 Certifique-se que o prompt esteja na pasta raiz do projeto
 
 1.  **Crie um ambiente virtual:**
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # No Windows: venv\Scripts\activate
-    ```
+```bash
+python -m venv venv
+source venv/bin/activate  # No Windows: venv\Scripts\activate
+```
 
 2.  **Instale as dependências:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 3.  **Inicie o servidor da API:**
-
-    ```bash
-    uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
-    ```
+```bash
+uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
 
 
 ## Conclusão
