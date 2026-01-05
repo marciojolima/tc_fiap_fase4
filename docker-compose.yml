@@ -1,0 +1,11 @@
+services:
+  api:
+    build: .
+    container_name: petr4-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    volumes:
+      - ./models:/app/models
+    restart: always

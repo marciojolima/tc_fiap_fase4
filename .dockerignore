@@ -1,0 +1,51 @@
+# Ignora os arquivos e pastas do Git
+.git
+.gitignore
+
+# Ignora arquivos de configuração locais e ambiente
+.env
+.env.*
+
+# Ignora cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignora cache do Poetry
+.poetry/
+.cache/
+*.lock.bak
+
+# Ignora as dependências criadas no venv local
+.venv/
+venv/
+
+# Ignora arquivos de testes e cobertura
+tests/
+*.cover
+coverage.*
+htmlcov/
+
+# Ignora artefatos de build
+build/
+dist/
+*.egg-info/
+*.log
+
+# Ignora arquivos do editor/IDE
+.vscode/
+.idea/
+*.swp
+*.bak
+*.tmp
+
+# Outros arquivos inúteis
+.DS_Store
+Thumbs.db
+*.pdf
+
+# Ignorar Notebooks
+*.ipynb
+TC_FASE4.ipynb
+history.txt
+README.md
