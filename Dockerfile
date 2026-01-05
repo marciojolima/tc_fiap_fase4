@@ -4,7 +4,7 @@ FROM python:3.12-slim
 # 2. Variáveis de Ambiente para otimizar o Python no Docker
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app
+    PYTHONPATH=/app/src
 
 # 3. Instalar dependências de sistema (necessárias para TensorFlow e Numpy)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -25,11 +25,11 @@ COPY pyproject.toml ./
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi --no-root --only main
 
+# 8. Copiar código fonte
 COPY src/ ./src/
-COPY models/ ./models/
 
 # 9. Expor a porta 8000
 EXPOSE 8000
 
 # 10. Comando para rodar a API
-CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
