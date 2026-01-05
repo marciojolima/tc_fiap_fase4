@@ -1,4 +1,3 @@
-// ~/dev/projects/python/tc_fiap_fase4/src/api/client/static/js/main.js
 
 function scrollToPredict() {
     document.getElementById('predict').scrollIntoView({ 

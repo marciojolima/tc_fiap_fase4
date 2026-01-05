@@ -11,7 +11,7 @@ templates = Jinja2Templates(directory="src/api/client/templates")
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """
-    Página inicial do cliente
+    Página inicial que executa o teste da api
     """
     return templates.TemplateResponse(
         "index.html",

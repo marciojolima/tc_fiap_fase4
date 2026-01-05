@@ -27,7 +27,7 @@ def get_latest_features():
 
     macro = pd.DataFrame(index=core.index)
     
-    # Downloads Macro
+    # Download de dados Macroeconômicos
     macro['USDBRL'] = yf.download('BRL=X', start=start_date, end=end_date, progress=False)['Close']
     macro['Brent'] = yf.download('BZ=F', start=start_date, end=end_date, progress=False)['Close']
     macro['Ibovespa'] = yf.download('^BVSP', start=start_date, end=end_date, progress=False)['Close']

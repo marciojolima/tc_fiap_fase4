@@ -31,5 +31,5 @@ class DisplayData(BaseModel):
 class PredictionResponse(BaseModel):
     modelo_usado: str
     data_geracao: datetime
-    dados_mercado: DisplayData  # <-- Novo campo
+    dados_mercado: DisplayData
     previsoes: List[PredictionItem]

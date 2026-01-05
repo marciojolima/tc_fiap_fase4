@@ -16,7 +16,7 @@ router = APIRouter()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "lstm_petr4_final.keras")
 SCALER_X_PATH = os.path.join(BASE_DIR, "models", "scaler_x_final.pkl")
-SCALER_Y_PATH = os.path.join(BASE_DIR, "models", "scaler_y_final.pkl") # Novo!
+SCALER_Y_PATH = os.path.join(BASE_DIR, "models", "scaler_y_final.pkl")
 
 model = None
 scaler_x = None
@@ -37,7 +37,7 @@ def load_artifacts():
 
 load_artifacts()
 
-# Definição das colunas (Baseado no seu print anterior)
+# Definição das colunas que foram usadas no modelo
 COLUNAS_MODELO = [
     'USDBRL_t-1', 'Brent_t-1', 'Ibovespa_t-1', 'Selic_t-1', 'Ibov_Return_t-1', 
     'Brent_Return_t-1', 'USD_Return_t-1', 'return_1', 'return_5', 'return_20', 
@@ -47,10 +47,7 @@ COLUNAS_MODELO = [
     'OBV', 'Volume_Ratio', 'VWAP', 'DoW_sin', 'DoW_cos', 'Month_sin', 'Month_cos'
 ]
 
-# Colunas Cíclicas (que geralmente não são escaladas ou já são -1 a 1)
-# Se você usou MinMaxScaler em TUDO no treino corrigido, deixe essa lista vazia.
-# Mas se usou a lógica do "Teste de Sanidade" onde separou cyclicals, defina-as aqui.
-# Vou assumir que você escalou TUDO conforme minha última recomendação.
+# Colunas Cíclicas que já foram encodadas
 CYCLICAL_COLS = [] 
 
 @router.post("/predict", response_model=PredictionResponse)
@@ -61,23 +58,21 @@ async def predict_days(request: PredictionRequestSimple):
             raise HTTPException(status_code=500, detail="Modelo ML indisponível")
 
     try:
-        # 1. Carregar dados históricos (precisamos de pelo menos 20 linhas)
+        # 1. Carregar dados históricos (pelo menos 20 linhas)
         df_completo, display_data = get_latest_features()
         
-        LOOKBACK = 20 # Tamanho da janela do seu LSTM
+        LOOKBACK = 20 # Tamanho da janela
         
-        # Garante que temos dados suficientes
         if len(df_completo) < LOOKBACK:
             raise HTTPException(status_code=500, detail="Dados históricos insuficientes para gerar janela.")
 
-        # Pega as últimas 20 linhas para formar a sequência
+        # Pega as últimas 20 linhas
         input_df = df_completo.iloc[-LOOKBACK:].copy()
         
         # Filtra colunas
         input_features = input_df[COLUNAS_MODELO]
 
         # 2. Escalonamento
-        # Tenta descobrir o que o scaler espera
         try:
             scaler_cols = scaler_x.feature_names_in_
         except:
@@ -109,7 +104,7 @@ async def predict_days(request: PredictionRequestSimple):
         # O modelo retorna (1, 1) com valor escalado
         pred_scaled = model.predict(input_sequence, verbose=0)
         
-        # ⚠️ O PULO DO GATO: INVERTER A ESCALA ⚠️
+        # inverter a escala para obter valores naturais
         pred_log_return = scaler_y.inverse_transform(pred_scaled)[0][0]
         
         # Converter Log Return -> Preço
@@ -123,9 +118,6 @@ async def predict_days(request: PredictionRequestSimple):
 
         # Monta resposta
         # Nota: Previsão recursiva para N dias é complexa. 
-        # Aqui vamos retornar o Dia + 1 calculado e projetar os outros dias com base nele
-        # ou avisar que é apenas para 1 dia.
-        
         previsoes = []
         
         # Dia 1 (Calculado com IA)
@@ -136,14 +128,12 @@ async def predict_days(request: PredictionRequestSimple):
         ))
         
         # Dias 2..N (Projeção simplificada baseada na tendência do dia 1)
-        # Se quiser arriscar recursividade, precisaria atualizar a input_sequence inteira,
-        # o que é difícil sem ter features futuras. Vamos manter simples.
         trend_factor = np.exp(pred_log_return)
         proj_price = predicted_price
         proj_date = next_date
         
         for i in range(2, request.dias + 1):
-            proj_price = proj_price * trend_factor # Assume tendência constante
+            proj_price = proj_price * trend_factor
             proj_date = proj_date + timedelta(days=1)
             if proj_date.weekday() >= 5: proj_date += timedelta(days=2)
             
@@ -164,4 +154,3 @@ async def predict_days(request: PredictionRequestSimple):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Erro interno: {str(e)}")
-    
