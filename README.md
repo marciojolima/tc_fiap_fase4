@@ -1,4 +1,4 @@
-# 🚀 FIAP Tech Challenge - Fase 4: Predição de Ações com LSTM
+# FIAP Tech Challenge - Fase 4: Predição de Ações com LSTM
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16-orange?style=for-the-badge&logo=tensorflow)
