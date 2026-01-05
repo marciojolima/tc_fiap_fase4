@@ -168,11 +168,17 @@ source venv/bin/activate  # No Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3.  **Inicie o servidor da API:**
+3.  **Instale o projeto:**
+```bash
+pip install -e .
+```
+
+## Como Acessar a Aplicação
+
+**Inicie o servidor da API:**
 ```bash
 uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
-
 
 ## Conclusão
 
