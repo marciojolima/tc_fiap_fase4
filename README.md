@@ -153,7 +153,7 @@ poetry install
 poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
 
-### Opção 3: Pip
+### Opção: Pip
 
 Certifique-se que o prompt esteja na pasta raiz do projeto
 
@@ -173,12 +173,25 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-## Como Acessar a Aplicação
-
-**Inicie o servidor da API:**
+4.  **Inicie o servidor da API:**
 ```bash
 uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
 ```
+
+### Opção: Docker
+
+Certifique-se que o prompt esteja na pasta raiz do projeto
+
+1.  **Inicie o container**
+```bash
+docker compose up --build
+```
+
+2.  **Abra o navegador e digite na barra de endereços**
+```bash
+http://localhost:8000
+```
+
 
 ## Conclusão
 
