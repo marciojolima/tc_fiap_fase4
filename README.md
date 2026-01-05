@@ -108,6 +108,59 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 ├── pyproject.toml
 └── README.md
 ```
+## ⚙️ Instalação e Execução
+
+Siga os passos abaixo para executar o projeto localmente.
+
+### Pré-requisitos
+-   [Git](https://git-scm.com/)
+-   [Docker](https://www.docker.com/products/docker-desktop/)
+-   [Python 3.12](https://www.python.org/) (para execução sem Docker)
+-   [Poetry](https://python-poetry.org/)
+
+
+### Clone o repositório e altere para o caminho raiz do projeto:
+    ```bash
+    git clone https://github.com/marciojolima/tc_fiap_fase4.git
+    cd tc_fiap_fase4
+    ```
+### Opção: Poetry
+
+Para executar a API localmente utilizando Poetry.
+
+Certifique-se que o prompt esteja na pasta raiz do projeto
+
+**Instale as dependências:**
+    ```bash
+    poetry install
+    ```
+
+**Inicie o servidor da API:**
+    ```bash
+    poetry run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
+    ```
+
+### Opção 3: Pip
+
+Certifique-se que o prompt esteja na pasta raiz do projeto
+
+1.  **Crie um ambiente virtual:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # No Windows: venv\Scripts\activate
+    ```
+
+2.  **Instale as dependências:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+3.  **Inicie o servidor da API:**
+
+    ```bash
+    uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
+    ```
+
 
 ## Conclusão
 
