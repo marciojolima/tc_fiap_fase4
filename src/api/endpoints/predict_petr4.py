@@ -1,63 +1,45 @@
 import os
 import joblib
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 from fastapi import APIRouter, HTTPException
 from datetime import datetime, timedelta
 from prometheus_client import Histogram, Gauge, Counter
 
-# Schemas e Services
-from api.schemas.prediction import PredictionRequestSimple, PredictionResponse, PredictionItem
-from api.services.market_data import market_service
-from api.config import MODELS_DIR # Certifique-se que o config existe ou ajuste o caminho abaixo
+from src.api.schemas.prediction import PredictionRequestSimple, PredictionResponse, PredictionItem
+from src.api.services.market_data import market_service
+from src.api.services.feature_pipeline import pipeline
+from src.api.config import MODEL_PATH, SCALER_X_PATH, SCALER_Y_PATH
 
 router = APIRouter(tags=["Previsão"])
 
-# --- 1. MONITORAMENTO (Prometheus) ---
-PREDICTION_VALUE_HIST = Histogram(
-    'model_prediction_price_brl', 
-    'Distribuição dos preços previstos (R$)',
-    buckets=[25, 30, 35, 40, 45, 50]
-)
-CONFIDENCE_GAUGE = Gauge('model_last_confidence_score', 'Confiança da última previsão')
-DIRECTION_COUNTER = Counter('model_prediction_direction_total', 'Direção da previsão', ['direction'])
-INPUT_PRICE_GAUGE = Gauge('model_input_current_price', 'Preço base utilizado')
+# --- MONITORAMENTO ---
+PREDICTION_VALUE_HIST = Histogram('model_prediction_price_brl', 'Distribuição preços (R$)', buckets=[25, 30, 35, 40, 45])
+CONFIDENCE_GAUGE = Gauge('model_last_confidence_score', 'Confiança')
+DIRECTION_COUNTER = Counter('model_prediction_direction_total', 'Direção', ['direction'])
+INPUT_PRICE_GAUGE = Gauge('model_input_current_price', 'Preço Input')
 
-# --- 2. CARREGAMENTO DE ARTEFATOS (ML) ---
-# Caminhos
-MODEL_PATH = os.path.join(MODELS_DIR, "lstm_petr4_final.keras")
-SCALER_X_PATH = os.path.join(MODELS_DIR, "scaler_x_final.pkl")
-SCALER_Y_PATH = os.path.join(MODELS_DIR, "scaler_y_final.pkl")
-
-# Variáveis Globais
+# --- CARREGAMENTO ML ---
 lstm_model = None
 scaler_x = None
 scaler_y = None
 
 def load_ml_artifacts():
-    """Tenta carregar o modelo real. Se falhar, a API continua rodando mas avisa."""
     global lstm_model, scaler_x, scaler_y
     try:
         if os.path.exists(MODEL_PATH):
             lstm_model = tf.keras.models.load_model(MODEL_PATH)
-            print(f"✅ Modelo LSTM carregado: {MODEL_PATH}")
-        else:
-            print(f"⚠️ Modelo não encontrado em: {MODEL_PATH}")
-
+            print(f"✅ LSTM Real carregada: {MODEL_PATH}")
         if os.path.exists(SCALER_X_PATH):
             scaler_x = joblib.load(SCALER_X_PATH)
-        
         if os.path.exists(SCALER_Y_PATH):
             scaler_y = joblib.load(SCALER_Y_PATH)
-            print("✅ Scalers carregados com sucesso.")
-            
     except Exception as e:
-        print(f"❌ Erro crítico ao carregar ML: {e}")
+        print(f"❌ Erro ML: {e}")
 
-# Carrega ao iniciar o arquivo
 load_ml_artifacts()
 
-# --- 3. ENDPOINT ---
 @router.post("/predict", response_model=PredictionResponse)
 async def predict_future(request: PredictionRequestSimple):
     """Este endpoint:
@@ -65,68 +47,102 @@ async def predict_future(request: PredictionRequestSimple):
     2. 🌍 **Baixa automaticamente** os dados mais recentes do mercado (Yahoo Finance).
     3. 🧠 Alimenta a Rede Neural LSTM.
     4. 📤 Retorna a projeção de preço e indicadores técnicos.
-    """
+    """    
     try:
-        # A. Obter Contexto de Mercado (Preço Real Agora)
-        contexto = market_service.get_current_context()
-        preco_atual = contexto['preco_atual']
+        # 1. Pipeline de Engenharia de Dados (REAL)
+        features_df, preco_atual_real = pipeline.prepare_input_data()
         
-        # Monitoramento: Registra o preço de entrada
-        INPUT_PRICE_GAUGE.set(preco_atual)
+        INPUT_PRICE_GAUGE.set(preco_atual_real)
+        
+        # Contexto para resposta
+        contexto_visual = market_service.get_current_context()
+        data_ref = datetime.strptime(contexto_visual['data_referencia'], '%Y-%m-%d')
         
         previsoes = []
-        current_price = preco_atual
-        data_ref = datetime.strptime(contexto['data_referencia'], '%Y-%m-%d')
         
-        # B. Lógica de Previsão
-        # NOTA IMPORTANTE:
-        # Para usar o 'lstm_model.predict()' aqui, precisaríamos reconstruir 
-        # as 34 features exatas (RSI, MACD, Lags) em tempo real.
-        # Como essa engenharia de dados complexa está no Notebook e não aqui,
-        # utilizaremos uma projeção baseada na tendência técnica atual para garantir estabilidade.
-        
-        # Define tendência baseada na SMA200 que veio do Market Service
-        tendencia_alta = "Alta" in contexto['tecnicos']['tendencia_sma200']
-        
-        for i in range(1, request.dias + 1):
-            # Simulação controlada baseada na tendência técnica real
-            if tendencia_alta:
-                fator = np.random.normal(0.001, 0.015) # Leve tendência de alta (+0.1%)
-            else:
-                fator = np.random.normal(-0.001, 0.015) # Leve tendência de baixa
-            
-            # Aplica variação
-            current_price = current_price * (1 + fator)
-            
-            # Cálculo de Confiança (Decaimento Temporal)
-            # Base 55% (Win Rate do Modelo) - 3% por dia
-            confianca = max(0.40, 0.55 - ((i - 1) * 0.03))
-            
-            # Data futura (pula fim de semana simples)
-            next_date = data_ref + timedelta(days=i)
-            if next_date.weekday() >= 5: 
-                next_date += timedelta(days=2)
+        if lstm_model and scaler_x and scaler_y:
+            try:
+                # --- CORREÇÃO DO ESCALONAMENTO ---
+                # O Scaler foi treinado apenas num subconjunto de colunas (as não cíclicas).
+                # Precisamos escalar SÓ o que ele conhece e manter o resto igual.
+                
+                # 1. Descobrir quais colunas o scaler espera
+                if hasattr(scaler_x, 'feature_names_in_'):
+                    cols_to_scale = scaler_x.feature_names_in_
+                else:
+                    # Fallback se foi treinado sem nomes (raro com pandas)
+                    cols_to_scale = features_df.columns 
 
-            # Monitoramento: Registra a previsão no Histograma
-            PREDICTION_VALUE_HIST.observe(current_price)
-            
-            previsoes.append(PredictionItem(
-                data_previsao=next_date.strftime('%d/%m/%Y'),
-                preco_previsto=round(current_price, 2),
-                confianca=round(confianca, 2)
-            ))
+                # 2. Criar uma cópia para não bagunçar o original
+                X_final_df = features_df.copy()
+                
+                # 3. Filtrar apenas as colunas que existem no DF atual e no Scaler
+                # Isso evita erro se faltar alguma coluna obscura
+                valid_cols = [c for c in cols_to_scale if c in X_final_df.columns]
+                
+                if not valid_cols:
+                    raise ValueError("Nenhuma coluna compatível encontrada entre Pipeline e Scaler.")
 
-        # C. Atualiza Métricas Finais
-        primeira_prev = previsoes[0]
-        CONFIDENCE_GAUGE.set(primeira_prev.confianca)
-        
-        direcao = "alta" if primeira_prev.preco_previsto > preco_atual else "baixa"
-        DIRECTION_COUNTER.labels(direction=direcao).inc()
+                # 4. Transformar APENAS essas colunas
+                X_final_df[valid_cols] = scaler_x.transform(X_final_df[valid_cols])
+                
+                # Nota: As colunas que NÃO estavam em valid_cols (ex: DoW_sin) 
+                # permanecem com seus valores originais no X_final_df, 
+                # exatamente como feito no notebook (X_train_scaled[cols] = ...)
+
+                # --- FIM DA CORREÇÃO ---
+
+                # B. Reshape para LSTM
+                # Garante que usamos TODAS as colunas na ordem que o Pipeline definiu (que deve bater com o treino)
+                # O DataFrame X_final_df agora tem colunas mistas (escaladas e não escaladas)
+                X_values = X_final_df.values
+                X_input = X_values.reshape(1, 20, X_values.shape[1])
+                
+                # C. Inferência
+                pred_scaled = lstm_model.predict(X_input, verbose=0)
+                
+                # D. Desescalar e Calcular
+                log_return_pred = scaler_y.inverse_transform(pred_scaled)[0][0]
+                price_d1 = preco_atual_real * np.exp(log_return_pred)
+                
+                # Projeção de Tendência para dias seguintes
+                fator_tendencia = np.exp(log_return_pred)
+                
+                proj_price = preco_atual_real
+                for i in range(1, request.dias + 1):
+                    if i == 1:
+                        proj_price = price_d1
+                    else:
+                        proj_price = proj_price * fator_tendencia
+                    
+                    confianca = max(0.40, 0.55 - ((i - 1) * 0.04))
+                    next_date = data_ref + timedelta(days=i)
+                    if next_date.weekday() >= 5: next_date += timedelta(days=2)
+                    
+                    PREDICTION_VALUE_HIST.observe(proj_price)
+                    
+                    previsoes.append(PredictionItem(
+                        data_previsao=next_date.strftime('%d/%m/%Y'),
+                        preco_previsto=round(float(proj_price), 2),
+                        confianca=round(confianca, 2)
+                    ))
+
+            except Exception as ml_err:
+                print(f"⚠️ Erro ML Detalhado: {ml_err}")
+                # Re-lança para cair no catch global ou usar fallback se quisesse
+                raise ml_err
+        else:
+            raise HTTPException(status_code=503, detail="Modelo ML não carregado.")
+
+        # Atualiza métricas
+        CONFIDENCE_GAUGE.set(previsoes[0].confianca)
+        dir_str = "alta" if previsoes[0].preco_previsto > preco_atual_real else "baixa"
+        DIRECTION_COUNTER.labels(direction=dir_str).inc()
 
         return PredictionResponse(
-            modelo_usado="LSTM_PETR4_Prod_v1" if lstm_model else "Heuristic_Fallback",
+            modelo_usado="LSTM_PETR4_Prod_Real_v1",
             data_geracao=datetime.now(),
-            dados_mercado=contexto,
+            dados_mercado=contexto_visual,
             previsoes=previsoes
         )
 

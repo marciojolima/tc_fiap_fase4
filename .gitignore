@@ -186,3 +186,4 @@ history.txt
 *.xlsx
 fly*
 .tool-versions
+backup/*
