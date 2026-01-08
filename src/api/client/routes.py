@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from datetime import datetime
 
 router = APIRouter(tags=["Cliente"])
 
@@ -18,7 +19,7 @@ async def home(request: Request):
         {
             "request": request,
             "titulo": "Tech Challenge FIAP - Previsão PETR4",
-            "ano": 2024
+            "ano": datetime.now().year
         }
     )
 
@@ -31,6 +32,7 @@ async def about(request: Request):
         "about.html",
         {
             "request": request,
-            "titulo": "Sobre o Projeto"
+            "titulo": "Sobre o Projeto",
+            "ano": datetime.now().year
         }
     )

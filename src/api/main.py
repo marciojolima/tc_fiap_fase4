@@ -2,7 +2,6 @@
 import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
 from api.client import routes as client_routes
 from api.endpoints import predict_petr4, health
@@ -33,7 +32,7 @@ print("="*30 + "\n")"""
 # Montar arquivos estáticos (CSS, JS, imagens)
 app.mount("/static", StaticFiles(directory=static_path), name="static")
 
-# Incluir rotas
+# Incluir pagina cliente
 app.include_router(client_routes.router)
 # Incluir rotas da API
 app.include_router(predict_petr4.router, prefix="/api")

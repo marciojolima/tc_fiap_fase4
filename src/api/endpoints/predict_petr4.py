@@ -60,6 +60,12 @@ load_ml_artifacts()
 # --- 3. ENDPOINT ---
 @router.post("/predict", response_model=PredictionResponse)
 async def predict_future(request: PredictionRequestSimple):
+    """Este endpoint:
+    1. 📥 Recebe a quantidade de dias (máx 5).
+    2. 🌍 **Baixa automaticamente** os dados mais recentes do mercado (Yahoo Finance).
+    3. 🧠 Alimenta a Rede Neural LSTM.
+    4. 📤 Retorna a projeção de preço e indicadores técnicos.
+    """
     try:
         # A. Obter Contexto de Mercado (Preço Real Agora)
         contexto = market_service.get_current_context()

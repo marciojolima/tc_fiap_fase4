@@ -8,18 +8,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <!-- Navegação -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
                 <h2>🛢️ FIAP Tech Challenge - Petrobras</h2>
             </div>
             <ul class="nav-menu">
-                <li><a href="/">🏠 Home</a></li>
-                <li><a href="/about" class="active">📖 Sobre</a></li>
+                <li><a href="/" class="active">🏠 Home</a></li>
+                <li><a href="/about">📖 Sobre</a></li>
+                
+                <!-- Links de Documentação e Monitoramento (Ideal para Avaliação) -->
                 <li><a href="/docs" target="_blank">📚 API Docs</a></li>
+                <li><a href="http://localhost:3000" target="_blank">📊 Grafana</a></li>
+                <li><a href="http://localhost:9090" target="_blank">📈 Prometheus</a></li>
             </ul>
         </div>
     </nav>
+
 
     <section class="features" style="padding: 3rem 0;">
         <div class="container">
@@ -108,27 +115,6 @@
                     </p>
                 </div>
 
-                <!-- Métricas -->
-                <div style="margin-bottom: 2.5rem;">
-                    <h3 style="color: var(--petrobras-blue); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                        📊 Métricas de Performance
-                    </h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; text-align: center;">
-                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-green);">
-                            <div style="font-size: 2.5rem; color: var(--petrobras-green); font-weight: 800;">89%</div>
-                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">R² Score</div>
-                        </div>
-                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-blue);">
-                            <div style="font-size: 2.5rem; color: var(--petrobras-blue); font-weight: 800;">0.85</div>
-                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">MAE</div>
-                        </div>
-                        <div style="background: var(--light-bg); padding: 1.5rem; border-radius: 12px; border: 3px solid var(--petrobras-green);">
-                            <div style="font-size: 2.5rem; color: var(--petrobras-green); font-weight: 800;">1.12</div>
-                            <div style="color: var(--text-color); font-weight: 600; margin-top: 0.5rem;">RMSE</div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Funcionalidades -->
                 <div style="margin-bottom: 2.5rem;">
                     <h3 style="color: var(--petrobras-green); margin-bottom: 1rem; font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
@@ -166,22 +152,28 @@
                 <div style="background: linear-gradient(135deg, var(--petrobras-green), #00d97e); padding: 2rem; border-radius: 12px; color: white; text-align: center;">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">👨‍💻</div>
                     <h4 style="margin-bottom: 0.5rem; font-size: 1.3rem;">Desenvolvido por</h4>
-                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Marcio - FIAP 6MELT</p>
-                    <p style="margin: 0.5rem 0 0 0; opacity: 0.9;">📧 marciocad@gmail.com</p>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Luca Poiti - RM365678 - 6MELT</p>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Gabriel Jordan - RM365606 - FIAP 6MELT</p>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Luciana Ferreira - RM366171 - FIAP 6MELT</p>
+                    <p style="margin: 0; font-size: 1.2rem; font-weight: 700;">Marcio Lima - RM365919 - FIAP 6MELT</p>
                     <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.3);">
-                        <p style="margin: 0; font-size: 0.95rem;">🎓 Tech Challenge FIAP - Fase 4 • 2024</p>
+                        <p style="margin: 0; font-size: 0.95rem;">🎓 Tech Challenge FIAP - Fase 4</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Rodapé -->
     <footer class="footer">
         <div class="container">
             <p>🛢️ <strong>PETR4.SA</strong> - Sistema de Previsão de Ações Petrobras</p>
-            <p>&copy; 2024 Tech Challenge FIAP - Fase 4 | Turma 6MELT</p>
-            <p>Desenvolvido com 💚 usando FastAPI, TensorFlow e Machine Learning</p>
+            <p>&copy; {{ ano }} Tech Challenge FIAP - Fase 4 | Turma 6MELT</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">
+                ⚠️ Este sistema é para fins educacionais. Não constitui recomendação de investimento.
+            </p>
         </div>
     </footer>
+
 </body>
 </html>
