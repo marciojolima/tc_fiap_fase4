@@ -201,6 +201,18 @@ Para garantir a confiabilidade e escalabilidade do modelo em produção, o proje
 
 A solução monitora tanto a saúde da infraestrutura (latência, throughput) quanto a performance do modelo de Machine Learning (drift de preço, confiança e viés).
 
+### 🧠 Validação em Tempo Real (Shadow Testing)
+
+Para garantir a confiabilidade do modelo em produção sem depender apenas de backtests passados, implementamos uma estratégia de **Shadow Testing** (Avaliação em Sombra).
+
+A cada requisição de previsão, o sistema realiza internamente uma inferência "retroativa": ele tenta prever o preço de fechamento atual (que já é conhecido) utilizando os dados dos 20 dias anteriores. A diferença entre o *Real* e o *Previsto* é enviada instantaneamente para o Prometheus.
+
+> **Exemplo Resultado Obtido:**
+> A métrica `model_real_error_abs` registrou um valor de aproximadamente **-0.71 BRL**.
+>
+> Isso indica uma discrepância de centavos (margem de erro de ~2%) em relação ao preço real do ativo.
+
+
 ### 🛠️ Acessando a Stack de Monitoramento
 
 Uma vez que os containers estejam rodando (`docker-compose up`), os serviços estarão disponíveis nas seguintes portas:
@@ -240,11 +252,9 @@ Para criar ou visualizar os Dashboards de performance:
    * Clique em **Save & Test**.
 3. Crie um novo Dashboard e adicione painéis utilizando as métricas listadas abaixo.
 
----
-
 ### 📊 Métricas Customizadas de Negócio
 
-Além das métricas padrão de HTTP, o modelo expõe as seguintes métricas de MLOps para rastreamento de performance e deriva (Drift):
+Além das métricas padrão de HTTP, o modelo expõe as seguintes métricas de MLOps para rastreamento de performance, deriva (Drift) e acurácia real:
 
 | Métrica | Tipo | Descrição | Uso no Grafana |
 | :--- | :--- | :--- | :--- |
@@ -252,6 +262,8 @@ Além das métricas padrão de HTTP, o modelo expõe as seguintes métricas de M
 | `model_last_confidence_score` | **Gauge** | Nível de confiança da última inferência. | Alertar se a confiança média cair abaixo de um limiar seguro. |
 | `model_prediction_direction_total` | **Counter** | Contagem de previsões de "Alta" vs "Baixa". | Identificar **Viés (Bias)** do modelo (ex: modelo só prevê alta). |
 | `model_input_current_price` | **Gauge** | Preço real do ativo no momento da requisição. | Comparar em um gráfico de linha: *Preço Real (Input)* vs *Preço Previsto (Output)*. |
+| `model_real_error_abs` | **Gauge** | **(Shadow Test)** Erro absoluto instantâneo em R$ (Real - Previsto). | Validar a precisão do modelo em tempo real. Valores próximos a 0 indicam alta performance. |
+| `model_real_accuracy_percentage` | **Histogram** | **(Shadow Test)** Distribuição do erro percentual (%). | Monitorar a margem de erro média do modelo em produção. |
 
 
 ## Conclusão
