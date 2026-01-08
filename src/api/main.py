@@ -4,9 +4,8 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from api.endpoints import predict_petr4
 from api.client import routes as client_routes
-from api.endpoints import health
+from api.endpoints import predict_petr4, health
 
 from prometheus_fastapi_instrumentator import Instrumentator
 
@@ -34,13 +33,11 @@ print("="*30 + "\n")"""
 # Montar arquivos estáticos (CSS, JS, imagens)
 app.mount("/static", StaticFiles(directory=static_path), name="static")
 
-
-
 # Incluir rotas
 app.include_router(client_routes.router)
 # Incluir rotas da API
 app.include_router(predict_petr4.router, prefix="/api")
-app.include_router(health.router)
+app.include_router(health.router, prefix="/api")
 
 # Ativar a instrumentação
 # Isso cria automaticamente o endpoint /metrics que o Prometheus vai ler

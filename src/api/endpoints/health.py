@@ -1,3 +1,4 @@
+# src/api/endpoints/health.py
 from fastapi import APIRouter
 
 router = APIRouter(tags=['Monitoring'])
