@@ -1,4 +1,5 @@
 services:
+  # --- API ---
   api:
     build: .
     container_name: petr4-api
@@ -7,5 +8,43 @@ services:
     environment:
       - PORT=8000
     volumes:
+      # Mapeia a pasta models para atualização fácil
       - ./models:/app/models
     restart: always
+
+  # --- MONITORAMENTO (Banco de Dados de Métricas) ---
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: petr4-prometheus
+    volumes:
+      # Configuração
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      # PERSISTÊNCIA: Salva os dados do modelo aqui
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    depends_on:
+      - api
+
+  # --- VISUALIZAÇÃO (Dashboards) ---
+  grafana:
+    image: grafana/grafana:latest
+    container_name: petr4-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      # PERSISTÊNCIA: Salva seus gráficos e senhas aqui
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+
+# Definição dos "HDs Virtuais" do Docker
+volumes:
+  prometheus_data:
+  grafana_data:
+  

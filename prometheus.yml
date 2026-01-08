@@ -1,0 +1,10 @@
+# prometheus.yml
+global:
+  scrape_interval: 5s # Coleta dados a cada 5 segundos
+
+scrape_configs:
+  - job_name: 'petr4_api'
+    static_configs:
+      # 'api' é o nome do serviço que definiremos no docker-compose
+      # 8000 é a porta interna da API
+      - targets: ['api:8000']

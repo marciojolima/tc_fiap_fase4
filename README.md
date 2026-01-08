@@ -22,6 +22,7 @@ O projeto prioriza **transparência e interpretabilidade**, apresentando ao usu�
 - [Estrutura de Pastas](#-estrutura-de-pastas)
 - [Instalação e Execução](#️-instalação-e-execução)
 - [Como Acessar a Aplicação](#como-acessar-a-aplicação)
+- [Monitoramento e Observabilidade](#-monitoramento-e-observabilidade)
 - [Conclusão](#conclusão)
 - [Autores](#-autores)
 
@@ -191,6 +192,66 @@ docker compose up --build
 ```bash
 http://localhost:8000
 ```
+
+---
+
+## 📈 Monitoramento e Observabilidade
+
+Para garantir a confiabilidade e escalabilidade do modelo em produção, o projeto implementa uma stack completa de monitoramento baseada em **Prometheus** (coleta de métricas) e **Grafana** (visualização).
+
+A solução monitora tanto a saúde da infraestrutura (latência, throughput) quanto a performance do modelo de Machine Learning (drift de preço, confiança e viés).
+
+### 🛠️ Acessando a Stack de Monitoramento
+
+Uma vez que os containers estejam rodando (`docker-compose up`), os serviços estarão disponíveis nas seguintes portas:
+
+| Serviço | URL | Descrição | Credenciais Padrão |
+| :--- | :--- | :--- | :--- |
+| **API Swagger** | `http://localhost:8000/docs` | Interface para testar o modelo e gerar tráfego. | N/A |
+| **Prometheus** | `http://localhost:9090` | Banco de dados de séries temporais e explorador de métricas. | N/A |
+| **Grafana** | `http://localhost:3000` | Dashboards visuais para análise de MLOps. | `admin` / `admin` |
+
+---
+
+### 🚀 Guia de Validação do Monitoramento
+
+Como o ambiente é iniciado "limpo", é necessário gerar tráfego para que as métricas sejam populadas. Siga o fluxo abaixo para validar a observabilidade:
+
+#### 1. Simulação de Carga (Geração de Dados)
+O Prometheus coleta dados baseados em eventos. Para visualizar gráficos, é necessário realizar inferências na API.
+1. Acesse o **Swagger UI** (`http://localhost:8000/docs`).
+2. Utilize o endpoint `POST /api/predict`.
+3. Clique em **Try it out** e depois em **Execute** repetidas vezes (sugere-se 10 a 20 requisições variando ou não os parâmetros).
+   > *Isso gerará o histórico necessário para alimentar os histogramas e contadores de MLOps.*
+
+#### 2. Verificação da Coleta (Prometheus)
+Para garantir que a API está exportando as métricas corretamente:
+1. Acesse o **Prometheus** (`http://localhost:9090`).
+2. Na barra de busca, digite a métrica de negócio: `model_last_confidence_score`.
+3. Clique em **Execute**.
+   > *Se um valor (ex: 0.55) for retornado, a comunicação entre os containers está ativa.*
+
+#### 3. Visualização (Grafana)
+Para criar ou visualizar os Dashboards de performance:
+1. Acesse o **Grafana** (`http://localhost:3000`) e faça login (`admin`/`admin`).
+2. Adicione a fonte de dados (**Data Source**):
+   * Selecione **Prometheus**.
+   * **Connection URL:** Utilize o endereço interno da rede Docker: `http://prometheus:9090` (Não use localhost aqui).
+   * Clique em **Save & Test**.
+3. Crie um novo Dashboard e adicione painéis utilizando as métricas listadas abaixo.
+
+---
+
+### 📊 Métricas Customizadas de Negócio
+
+Além das métricas padrão de HTTP, o modelo expõe as seguintes métricas de MLOps para rastreamento de performance e deriva (Drift):
+
+| Métrica | Tipo | Descrição | Uso no Grafana |
+| :--- | :--- | :--- | :--- |
+| `model_prediction_price_brl` | **Histogram** | Distribuição dos preços previstos (R$). | Monitorar **Model Drift** (Se a distribuição mudar drasticamente, o modelo pode estar descalibrado). |
+| `model_last_confidence_score` | **Gauge** | Nível de confiança da última inferência. | Alertar se a confiança média cair abaixo de um limiar seguro. |
+| `model_prediction_direction_total` | **Counter** | Contagem de previsões de "Alta" vs "Baixa". | Identificar **Viés (Bias)** do modelo (ex: modelo só prevê alta). |
+| `model_input_current_price` | **Gauge** | Preço real do ativo no momento da requisição. | Comparar em um gráfico de linha: *Preço Real (Input)* vs *Preço Previsto (Output)*. |
 
 
 ## Conclusão
