@@ -3,6 +3,10 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.16-orange?style=for-the-badge&logo=tensorflow)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=for-the-badge&logo=fastapi)
+![Docker](https://img.shields.io/badge/Docker-containerization-2496ED?style=for-the-badge&logo=docker)
+![Prometheus](https://img.shields.io/badge/Prometheus-monitoring-E6522C?style=for-the-badge&logo=prometheus)
+![Grafana](https://img.shields.io/badge/Grafana-observability-F46800?style=for-the-badge&logo=grafana)
+![yfinance](https://img.shields.io/badge/yfinance-market%20data-000000?style=for-the-badge)
 
 ## 📄 Sobre o Projeto
 
