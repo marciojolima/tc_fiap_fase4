@@ -18,6 +18,11 @@ class TecnicosData(BaseModel):
     volatilidade_atr: float = Field(..., description="Average True Range (Volatilidade média)", example=0.42)
     tendencia_sma200: str = Field(..., description="Tendência de longo prazo baseada na Média Móvel de 200 dias", example="Alta 🟢")
 
+    # Novos campos devidamente tipados
+    bb_posicao: float = Field(..., description="Posição do preço dentro das Bandas de Bollinger (%)", example=85.5)
+    momentum_5d: float = Field(..., description="Variação do preço nos últimos 5 dias (R$)", example=1.25)
+    vwap: float = Field(..., description="Preço Médio Ponderado por Volume", example=34.10)
+
 class DisplayData(BaseModel):
     """Resumo dos dados de mercado utilizados para a previsão"""
     preco_atual: float = Field(..., description="Último preço de fechamento conhecido (R$)", example=34.50)
@@ -40,7 +45,7 @@ class PredictionResponse(BaseModel):
     dados_mercado: DisplayData = Field(..., description="Contexto de mercado utilizado como base")
     previsoes: List[PredictionItem] = Field(..., description="Lista de previsões para os próximos dias")
 
-    # Isso cria um exemplo visual lindo no Swagger
+    # Exemplo atualizado para o Swagger UI
     model_config = ConfigDict(json_schema_extra={
         "example": {
             "modelo_usado": "LSTM_PETR4_Final",
@@ -58,7 +63,10 @@ class PredictionResponse(BaseModel):
                     "rsi": 45.2,
                     "macd": 0.12,
                     "volatilidade_atr": 0.55,
-                    "tendencia_sma200": "Alta 🟢"
+                    "tendencia_sma200": "Alta 🟢",
+                    "bb_posicao": 85.5,
+                    "momentum_5d": 1.25,
+                    "vwap": 34.10
                 }
             },
             "previsoes": [
@@ -68,7 +76,7 @@ class PredictionResponse(BaseModel):
         }
     })
 
-# --- MODELO DE REQUISIÇÃO (SIMPLIFICADO) ---
+# --- MODELO DE REQUISIÇÃO ---
 
 class PredictionRequestSimple(BaseModel):
     """Parâmetros de entrada para solicitação de previsão"""
@@ -76,5 +84,5 @@ class PredictionRequestSimple(BaseModel):
         default=3, 
         ge=1, 
         le=5, 
-        description="Número de dias futuros para prever. Limitado a 5 para manter a acurácia do modelo autoregressivo."
+        description="Número de dias futuros para prever."
     )

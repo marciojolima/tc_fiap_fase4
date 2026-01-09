@@ -74,25 +74,37 @@ async function fazerPrevisao() {
     }
 }
 
+// Renderiza o Dashboard
 function mostrarResultado(data) {
     const resultadoDiv = document.getElementById('resultado');
     const mercado = data.dados_mercado;
     
-    // Formatação de Datas e Valores
     const dataRef = new Date(mercado.data_referencia + 'T00:00:00');
     const dataFormatada = dataRef.toLocaleDateString('pt-BR');
     
-    // Formatadores Auxiliares
-    const fmtMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    const fmtNum = (valor) => valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    // Novo: Formata Ibovespa sem casas decimais
-    const fmtInteiro = (valor) => valor.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+    const fmtMoeda = (valor) => {
+        if (valor === undefined || valor === null) return "R$ --";
+        return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    };
+    
+    const fmtNum = (valor) => {
+        if (valor === undefined || valor === null) return "--";
+        return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    };
+    
+    const fmtInteiro = (valor) => {
+        if (valor === undefined || valor === null) return "--";
+        return valor.toLocaleString('pt-BR', { maximumFractionDigits: 0 });
+    };
 
-    // HTML do Dashboard
+    // Cores dinâmicas
+    const momColor = mercado.tecnicos.momentum_5d >= 0 ? '#16a34a' : '#dc2626'; 
+    const momSinal = mercado.tecnicos.momentum_5d >= 0 ? '+' : '';
+
     let html = `
         <div class="market-dashboard">
             
-            <!-- 1. Cabeçalho com Preço Atual -->
+            <!-- 1. Cabeçalho -->
             <div class="dashboard-header">
                 <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">
                     📅 Dados de Fechamento: ${dataFormatada}
@@ -103,8 +115,8 @@ function mostrarResultado(data) {
                 <div>Último preço real da PETR4.SA utilizado como base.</div>
             </div>
 
-            <!-- 2. Grid de Variáveis Macroeconômicas -->
-            <h3 class="section-title" style="font-size: 1.2rem; margin-bottom: 1rem;">
+            <!-- 2. Macroeconomia -->
+            <h3 class="section-title" style="font-size: 1.2rem; margin-bottom: 1rem; color: #1e3a8a;">
                 🌎 Cenário Macroeconômico (Inputs do Modelo)
             </h3>
             <div class="indicators-grid">
@@ -118,20 +130,20 @@ function mostrarResultado(data) {
                 </div>
                 <div class="indicator-card">
                     <div class="indicator-title">📈 Ibovespa</div>
-                    <!-- Alterado: Usa fmtInteiro para tirar o .125 -->
                     <div class="indicator-value">${fmtInteiro(mercado.macro.ibovespa)} pts</div>
                 </div>
                 <div class="indicator-card">
                     <div class="indicator-title">🏦 Taxa Selic (Anualizada)</div>
-                    <!-- Alterado: Adiciona % a.a. -->
                     <div class="indicator-value">${fmtNum(mercado.macro.selic)}% a.a.</div>
                 </div>
             </div>
 
-            <!-- 3. Grid de Indicadores Técnicos -->
-            <h3 class="section-title" style="font-size: 1.2rem; margin-bottom: 1rem;">
+            <!-- 3. Indicadores Técnicos -->
+            <h3 class="section-title" style="font-size: 1.2rem; margin-bottom: 1rem; color: #1e3a8a;">
                 📊 Indicadores Técnicos Calculados
             </h3>
+            
+            <!-- Linha 1 -->
             <div class="indicators-grid">
                 <div class="indicator-card">
                     <div class="indicator-title">RSI (Força Relativa)</div>
@@ -153,27 +165,47 @@ function mostrarResultado(data) {
                 </div>
             </div>
 
-            <!-- 4. Explicação Metodológica (O que o usuário pediu) -->
+            <!-- Linha 2 (NOVOS INDICADORES) -->
+            <div class="indicators-grid" style="margin-top: 10px;">
+                <div class="indicator-card">
+                    <div class="indicator-title">Momentum (5d)</div>
+                    <div class="indicator-value" style="color: ${momColor}">
+                        ${momSinal}${fmtMoeda(mercado.tecnicos.momentum_5d)}
+                    </div>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-title">Bollinger (%B)</div>
+                    <div class="indicator-value">${fmtNum(mercado.tecnicos.bb_posicao)}%</div>
+                </div>
+                <div class="indicator-card">
+                    <div class="indicator-title">VWAP (Médio Pond.)</div>
+                    <div class="indicator-value">${fmtMoeda(mercado.tecnicos.vwap)}</div>
+                </div>
+                 <!-- Card vazio para alinhar o grid (se for 4 colunas) -->
+                <div class="indicator-card" style="visibility: hidden;"></div>
+            </div>
+
+            <!-- 4. Metodologia -->
             <div class="methodology-box">
                 <h4 style="margin-top:0; color: #1e40af;">🧠 Entenda como a IA processou esses dados</h4>
                 <div class="methodology-grid">
                     <div class="method-item">
-                        <h5>📉 Retorno Logarítmico (Log Return)</h5>
-                        <p>O modelo não prevê o preço absoluto (ex: R$ 40), mas sim o <em>logaritmo do retorno</em> diário. Isso torna a série temporal estacionária e melhora a estabilidade matemática da rede neural LSTM.</p>
+                        <h5>📉 Retorno Logarítmico</h5>
+                        <p>O modelo prevê o <em>logaritmo do retorno</em> diário para garantir estacionariedade matemática.</p>
                     </div>
                     <div class="method-item">
-                        <h5>⏳ Janelas Móveis (Rolling Windows)</h5>
-                        <p>Utilizamos médias móveis de 20 dias (curto prazo) e 200 dias (longo prazo) para capturar a tendência. O modelo "olha" para os últimos 20 dias de histórico para prever o dia seguinte.</p>
+                        <h5>⏳ Janelas Móveis</h5>
+                        <p>Médias de 20 e 200 dias capturam tendências. O VWAP pondera pelo volume.</p>
                     </div>
                     <div class="method-item">
-                        <h5>⚡ Volatilidade & Sazonalidade</h5>
-                        <p>Indicadores como Bandas de Bollinger e ATR medem o risco. Também inserimos dados cíclicos (Seno/Cosseno) para ensinar à IA sobre padrões semanais e mensais.</p>
+                        <h5>⚡ Volatilidade</h5>
+                        <p>Bandas de Bollinger e ATR indicam o risco. Momentum mede a velocidade.</p>
                     </div>
                 </div>
             </div>
 
             <!-- 5. Tabela de Previsão -->
-            <h3 class="section-title" style="font-size: 1.4rem; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">
+            <h3 class="section-title" style="font-size: 1.4rem; margin-top: 2rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; color: #1e3a8a;">
                 🚀 Previsão do Modelo
             </h3>
             <table>
@@ -182,6 +214,7 @@ function mostrarResultado(data) {
                         <th>Data Futura</th>
                         <th>Preço Previsto</th>
                         <th>Tendência*</th>
+                        <th>Confiança</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -194,12 +227,22 @@ function mostrarResultado(data) {
         const corVar = variacao >= 0 ? '#16a34a' : '#dc2626';
         const icone = variacao >= 0 ? '▲' : '▼';
         
+        const confPct = Math.round(previsao.confianca * 100);
+        
         html += `
             <tr>
                 <td>${previsao.data_previsao}</td>
                 <td style="font-weight: bold; font-size: 1.1rem;">${fmtMoeda(previsao.preco_previsto)}</td>
                 <td style="color: ${corVar}; font-weight: 600;">
                     ${icone} ${Math.abs(variacao).toFixed(2)}%
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                        <div style="width: 50px; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                            <div style="width: ${confPct}%; height: 100%; background: #2563eb;"></div>
+                        </div>
+                        <span style="font-size: 0.8rem;">${confPct}%</span>
+                    </div>
                 </td>
             </tr>
         `;
@@ -210,7 +253,7 @@ function mostrarResultado(data) {
                 </tbody>
             </table>
             <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-top: 1rem;">
-                * A tendência é comparada em relação ao dia anterior previsto. <br>
+                * A tendência é comparada em relação ao dia anterior. <br>
                 Modelo: ${data.modelo_usado} | Processado em: ${new Date(data.data_geracao).toLocaleTimeString()}
             </p>
         </div>
