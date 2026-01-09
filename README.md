@@ -140,7 +140,7 @@ Siga os passos abaixo para executar o projeto localmente.
 
 ### Pré-requisitos
 -   [Git](https://git-scm.com/)
--   [Docker](https://www.docker.com/products/docker-desktop/)
+-   [Docker](https://www.docker.com/products/docker-desktop/) Para incorporação do Prometheus e Grafana
 -   [Python 3.12](https://www.python.org/) exatamente esta versão para compatibilidade com o treino do modelo
 -   [Poetry](https://python-poetry.org/)
 
@@ -150,6 +150,21 @@ Siga os passos abaixo para executar o projeto localmente.
 git clone https://github.com/marciojolima/tc_fiap_fase4.git
 cd tc_fiap_fase4
 ```
+
+### Opção: Docker (Recomendada)
+
+Certifique-se que o prompt esteja na pasta raiz do projeto
+
+1.  **Inicie o container**
+```bash
+docker compose up --build
+```
+
+2.  **Abra o navegador e digite na barra de endereços**
+```bash
+http://localhost:8000
+```
+
 ### Opção: Poetry
 
 Para executar a API localmente utilizando Poetry.
@@ -189,20 +204,6 @@ pip install -e .
 4.  **Inicie o servidor da API:**
 ```bash
 uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --workers 4
-```
-
-### Opção: Docker
-
-Certifique-se que o prompt esteja na pasta raiz do projeto
-
-1.  **Inicie o container**
-```bash
-docker compose up --build
-```
-
-2.  **Abra o navegador e digite na barra de endereços**
-```bash
-http://localhost:8000
 ```
 
 ---
