@@ -108,17 +108,25 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 ## 📂 Estrutura de Pastas
 
 ```text
+.
 ├── src
-│   ├── api
-│   │   ├── client          # Frontend (HTML/CSS/JS)
-│   │   ├── endpoints       # Rotas da API (Predict)
-│   │   ├── schemas         # Modelos Pydantic (Request/Response)
-│   │   ├── services        # Lógica de ML e Coleta de Dados
-│   │   └── main.py         # Entrypoint da aplicação
-│   ├── models              # Arquivos binários (.keras, .pkl)
-│   └── notebooks           # Jupyter Notebooks de estudo e treino
-├── Dockerfile
-├── pyproject.toml
+│   └── api                 # Aplicação FastAPI
+│       ├── client          # Frontend (HTML / CSS / JS)
+│       ├── endpoints       # Rotas da API (Health, Predict)
+│       ├── schemas         # Modelos Pydantic (Request / Response)
+│       ├── services        # Lógica de ML e dados de mercado
+│       ├── config.py       # Configurações da aplicação
+│       └── main.py         # Entrypoint da API
+├── models                  # Artefatos treinados (.keras, .pkl)
+│   ├── lstm_petr4_final.keras
+│   ├── scaler_x_final.pkl
+│   └── scaler_y_final.pkl
+├── notebooks               # Estudos, EDA e treino do modelo
+│   └── TC_FASE4.ipynb
+├── Dockerfile              # Build da imagem da aplicação
+├── docker-compose.yml      # Orquestração (API + Prometheus)
+├── prometheus.yml          # Configuração de métricas
+├── pyproject.toml          # Dependências e configurações do projeto
 └── README.md
 ```
 
