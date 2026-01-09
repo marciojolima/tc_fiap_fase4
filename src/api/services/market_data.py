@@ -8,20 +8,33 @@ from datetime import datetime, timedelta
 class MarketDataService:
     
     def _get_selic_real(self):
-        """Busca a taxa Selic atualizada"""
+        """
+        Busca a taxa Selic atualizada.
+        Retorna None em caso de erro para indicar falha visualmente.
+        """
         try:
             hoje = datetime.now()
             inicio = hoje - timedelta(days=15)
             url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial={inicio.strftime('%d/%m/%Y')}&dataFinal={hoje.strftime('%d/%m/%Y')}"
-            
+            print(f"url BACEN: {url}")
+
             headers = {"User-Agent": "Mozilla/5.0"}
             response = requests.get(url, headers=headers, timeout=3)
+            
             if response.status_code == 200:
-                val = float(response.json()[-1]['valor'])
-                return val
-        except:
-            pass
-        return 15.0 # Fallback
+                dados = response.json()
+                if dados and len(dados) > 0:
+                    val = float(dados[-1]['valor'])
+                    return val
+            
+            # Se chegou aqui, a API respondeu mas sem dados úteis
+            print(f"⚠️ ALERTA BCB: API respondeu com status {response.status_code} ou lista vazia.")
+
+        except Exception as e:
+            # Erro de conexão, timeout, etc.
+            print(f"❌ ERRO CRÍTICO BCB: Falha ao buscar Selic. Detalhe: {e}")
+            
+        return None # Retorna Nulo. O sanitize_float vai converter para 0.0 na tela.
 
     def _sanitize_float(self, value, default=0.0):
         """
