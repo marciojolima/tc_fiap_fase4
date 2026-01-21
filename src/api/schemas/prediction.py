@@ -3,7 +3,6 @@ from typing import List, Optional
 from datetime import datetime
 
 # --- SUB-MODELOS DE DADOS DE MERCADO ---
-
 class MacroData(BaseModel):
     """Indicadores Macroeconômicos usados no modelo"""
     dolar: float = Field(..., description="Cotação atual do Dólar (USD/BRL)", example=5.52)
@@ -31,7 +30,6 @@ class DisplayData(BaseModel):
     tecnicos: TecnicosData
 
 # --- MODELOS DE RESPOSTA PRINCIPAL ---
-
 class PredictionItem(BaseModel):
     """Previsão individual por dia"""
     data_previsao: str = Field(..., description="Data alvo da previsão (DD/MM/YYYY)", example="16/01/2025")
@@ -77,7 +75,6 @@ class PredictionResponse(BaseModel):
     })
 
 # --- MODELO DE REQUISIÇÃO ---
-
 class PredictionRequestSimple(BaseModel):
     """Parâmetros de entrada para solicitação de previsão"""
     dias: int = Field(
