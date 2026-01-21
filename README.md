@@ -153,9 +153,7 @@ cd tc_fiap_fase4
 
 ### Opção: Docker (Recomendada)
 
-Certifique-se que o prompt esteja na pasta raiz do projeto
-
-1.  **Inicie o container**
+1.  **Com o Docker instalado, use o shell e vá até a pasta raiz do projeto e execute este comando para iniciar o container**
 ```bash
 docker compose up --build
 ```
