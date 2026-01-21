@@ -68,10 +68,10 @@ Toda a implementação do modelo de *Machine Learning* com **LSTM** — incluind
 - **Linguagem:** Python 3.12  
 - **Gerenciamento de Dependências:** Poetry  
 - **Machine Learning:** TensorFlow/Keras, Scikit-learn  
-- **Processamento de Dados:** Pandas, NumPy, yfinance  
+- **Processamento de Dados:** Pandas, NumPy, yfinance, api do Banco Central  
 - **Backend:** FastAPI, Uvicorn  
 - **Frontend:** HTML5, CSS3, JavaScript  
-- **Containerização:** Docker (pronto para deploy)
+- **Containerização:** Docker
 
 ---
 
