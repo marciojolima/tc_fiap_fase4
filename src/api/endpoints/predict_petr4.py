@@ -14,13 +14,13 @@ from src.api.config import MODEL_PATH, SCALER_X_PATH, SCALER_Y_PATH
 
 router = APIRouter(tags=["Previsão"])
 
-# --- MONITORAMENTO DE NEGÓCIO (Existente) ---
+# --- MONITORAMENTO DE NEGÓCIO ---
 PREDICTION_VALUE_HIST = Histogram('model_prediction_price_brl', 'Distribuição preços (R$)', buckets=[25, 30, 35, 40, 45])
 CONFIDENCE_GAUGE = Gauge('model_last_confidence_score', 'Confiança')
 DIRECTION_COUNTER = Counter('model_prediction_direction_total', 'Direção', ['direction'])
 INPUT_PRICE_GAUGE = Gauge('model_input_current_price', 'Preço Input')
 
-# --- NOVO: MONITORAMENTO DE PERFORMANCE REAL (Shadow Test) ---
+# --- MONITORAMENTO DE PERFORMANCE REAL (Shadow Test) ---
 REAL_ERROR_GAUGE = Gauge('model_real_error_abs', 'Erro Real Instantâneo (R$): Preço Hoje - Previsão Shadow')
 REAL_ACCURACY_HIST = Histogram('model_real_accuracy_percentage', 'Erro Percentual Real (%)', buckets=[0.01, 0.02, 0.05, 0.10])
 
