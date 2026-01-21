@@ -20,7 +20,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 # 2. Monta o caminho completo até a pasta static: .../src/api/client/static
 static_path = os.path.join(script_dir, "client", "static")
 
-# --- DEBUG: Cole isso no seu código ---
+# DEBUG
 """print("\n" + "="*30)
 print(f"📍 ONDE ESTOU (main.py): {script_dir}")
 print(f"📁 TENTANDO ACESSAR:    {static_path}")
@@ -38,8 +38,7 @@ app.include_router(client_routes.router)
 app.include_router(predict_petr4.router, prefix="/api")
 app.include_router(health.router, prefix="/api")
 
-# Ativar a instrumentação
-# Isso cria automaticamente o endpoint /metrics que o Prometheus vai ler
+# Cria automaticamente o endpoint /metrics que o Prometheus vai ler
 Instrumentator().instrument(app).expose(app)
 
 if __name__ == "__main__":
