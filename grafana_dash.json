@@ -1,0 +1,104 @@
+{
+  "title": "Model Observability - PETR4 (Local)",
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "1m",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Preço Real vs Previsão (Mediana)",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 8 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "model_input_current_price",
+          "legendFormat": "Preço Real"
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.5, rate(model_prediction_price_brl_bucket[1d]))",
+          "legendFormat": "Previsão (P50)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyBRL"
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Confiança Média do Modelo (Diária)",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "avg_over_time(model_last_confidence_score[1d])"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "max": 1
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Erro Percentual Médio Diário (Shadow Test)",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "(rate(model_real_accuracy_percentage_sum[1d]) / rate(model_real_accuracy_percentage_count[1d])) * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Erro Percentual - P95 (Risco)",
+      "gridPos": { "x": 0, "y": 14, "w": 24, "h": 6 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, rate(model_real_accuracy_percentage_bucket[1d])) * 100"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Direção das Previsões (Últimos 7 dias)",
+      "gridPos": { "x": 0, "y": 20, "w": 24, "h": 5 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "increase(model_prediction_direction_total[7d])",
+          "legendFormat": "{{direction}}"
+        }
+      ],
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"]
+        }
+      }
+    }
+  ]
+}
