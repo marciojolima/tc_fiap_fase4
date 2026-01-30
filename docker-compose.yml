@@ -8,7 +8,7 @@ services:
     environment:
       - PORT=8000
     volumes:
-      # Mapeia a pasta models para atualização fácil
+      # Mapeia a pasta models (modelos treinados)
       - ./models:/app/models
     restart: always
 
@@ -19,7 +19,7 @@ services:
     volumes:
       # Configuração
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      # PERSISTÊNCIA: Salva os dados do modelo aqui
+      # PERSISTÊNCIA
       - prometheus_data:/prometheus
     ports:
       - "9090:9090"
@@ -38,12 +38,12 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
-      # PERSISTÊNCIA: Salva seus gráficos e senhas aqui
+      # PERSISTÊNCIA: gráficos
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
 
-# Definição dos "HDs Virtuais" do Docker
+# "HDs Virtuais" do Docker
 volumes:
   prometheus_data:
   grafana_data:
