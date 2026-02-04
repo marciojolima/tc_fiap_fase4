@@ -99,7 +99,6 @@ async def predict_future(request: PredictionRequestSimple):
                     REAL_ERROR_GAUGE.set(erro_reais)
                     REAL_ACCURACY_HIST.observe(erro_percentual)
                     
-                    # (Opcional) Print no log para você ver acontecendo
                     # print(f"🔍 Shadow Test: Real={preco_atual_real:.2f} | Previsto={price_shadow_prediction:.2f} | Erro={erro_reais:.2f}")
                     
                 except Exception as shadow_e:
