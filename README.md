@@ -289,7 +289,7 @@ Para o futuro, destacam-se a incorporação de novas fontes de dados, o aprimora
 
 ## 👥 Autores
 
-**Turma 6MELT - FIAP**
+**Turma 6MLET - FIAP**
 
 * Luca Poiti - RM365678
 * Gabriel Jordan - RM365606
